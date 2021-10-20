@@ -1008,9 +1008,8 @@ namespace day0x02
         #endregion
         static void Main(string[] args)
         {
-            Console.WriteLine("--- AOC 2020 [D0x02]");
-
             var validPasswords = 0;
+            var validPasswords2 = 0;
 
             //Foreach line
             foreach (var line in INPUT1.Split(Environment.NewLine))
@@ -1033,9 +1032,10 @@ namespace day0x02
 
                 Console.Write($"{line} ==> Limits: {lowerLimit}/{upperLimit}, Char: {character}, Password: {password}");
 
-                //parse password and count character
+                //parse password and count character - Part1
                 var charCount = 0;
-                foreach(var c in password.ToCharArray())
+                var pwdArray = password.ToCharArray();
+                foreach (var c in pwdArray)
                 {
                     if (c.Equals(character))
                     {
@@ -1043,17 +1043,30 @@ namespace day0x02
                     }
                 }
 
-                //check if in limits
+                //check if in limits - Part1
                 if (charCount >= lowerLimit && charCount <= upperLimit)
                 {
-                    Console.Write("  VALID <-------------------");
+                    Console.Write("  VALID PART 1  ");
                     validPasswords++;
+                }
+
+                var pos1 = pwdArray[lowerLimit - 1];
+                var pos2 = pwdArray[upperLimit - 1];
+
+                if((pos1.Equals(character)) ^ (pos2.Equals(character)))
+                {
+                    Console.Write("  VALID PART 2  ");
+                    validPasswords2++;
                 }
 
                 Console.WriteLine();
             }
 
-            Console.WriteLine($"\nRESULT = {validPasswords}");
+            Console.WriteLine("--- AOC 2020 [D0x02]");
+            Console.WriteLine($"RESULT = {validPasswords}");
+            Console.WriteLine();
+            Console.WriteLine("--- AOC 2020 [D0x02] P2");
+            Console.WriteLine($"RESULT = {validPasswords2}");
         }
 
         private static int StrToInt(string input)
