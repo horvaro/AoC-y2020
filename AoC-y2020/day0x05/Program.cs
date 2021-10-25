@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace day0x05
 {
@@ -7,6 +8,8 @@ namespace day0x05
         static void Main(string[] args)
         {
             var highestSeatId = 0;
+            var seatIdList = new SortedSet<int>();
+            var mySeatId = 0;
 
             foreach (var line in INPUT.Split(Environment.NewLine))
             {
@@ -16,13 +19,42 @@ namespace day0x05
                 var row = BSPHelper.Partition(front2back, 'F', 'B', 127);
                 var col = BSPHelper.Partition(left2right, 'L', 'R', 7);
 
+                // Part 1
                 var id = row * 8 + col;
-
                 if (id > highestSeatId) highestSeatId = id;
+
+                // Part 2
+                _ = seatIdList.Add(id);
             }
+
+
+            // Part 2
+            var idList = new int[seatIdList.Count];
+            seatIdList.CopyTo(idList);
+
+            for (int i = 1; i < idList.Length-1; i++)
+            {
+                var curr = idList[i];
+                var next = curr + 1;
+                var prev = curr - 1;
+
+                if (next != idList[i + 1])
+                {
+                    mySeatId = next;
+                }
+
+                if (prev != idList[i - 1])
+                {
+                    mySeatId = prev;
+                }
+            }
+
 
             Console.WriteLine("--- AOC 2020 [D0x05]");
             Console.WriteLine($"RESULT = {highestSeatId}");
+
+            Console.WriteLine("--- AOC 2020 [D0x05] Part 2");
+            Console.WriteLine($"RESULT = {mySeatId}");
         }
 
         #region input
