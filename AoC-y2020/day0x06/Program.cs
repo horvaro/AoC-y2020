@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace day0x06
 {
@@ -9,6 +10,7 @@ namespace day0x06
         {
             var rawGroupedAnswers = new List<List<string>>();
             var answerSum = 0;
+            var answerSum2 = 0;
 
             // Load answers into groups
             var answers = new List<string>();
@@ -26,9 +28,9 @@ namespace day0x06
                 }
             }
 
-            // Part 1, Find sum of yes
+            // Part 1, Find sum of single yes
             rawGroupedAnswers.ForEach(group => {
-                var yesSet = new HashSet<char>();
+                var yesSet = new HashSet<char>(); // Each answer to single questions counts only once
                 group.ForEach(answers => {
                     foreach(var c in answers.ToCharArray())
                     {
@@ -38,8 +40,37 @@ namespace day0x06
                 answerSum += yesSet.Count;
             });
 
+            // Part 2, Find answers to which all in group said yes
+            rawGroupedAnswers.ForEach(group => {
+                var yesDict = new Dictionary<char, int>();
+                var groupCount = 0;
+
+                group.ForEach(answers => {
+                    foreach (var c in answers.ToCharArray())
+                    {
+                        if (yesDict.ContainsKey(c))
+                        {
+                            yesDict[c]++;
+                        }
+                        else
+                        {
+                            yesDict.Add(c, 1);
+                        }
+                    }
+                });
+
+                yesDict.Where(y => y.Value == group.Count).Select(i => i.Value).ToList().ForEach(i => {
+                    groupCount++;
+                });
+                answerSum2 += groupCount;
+            });
+
+
             Console.WriteLine("--- AOC 2020 [D0x06]");
             Console.WriteLine($"RESULT = {answerSum}");
+
+            Console.WriteLine("--- AOC 2020 [D0x06] Part 2");
+            Console.WriteLine($"RESULT = {answerSum2}");
         }
 
         #region input
