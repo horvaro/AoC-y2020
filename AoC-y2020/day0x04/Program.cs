@@ -8,6 +8,7 @@ namespace day0x04
         static void Main(string[] args)
         {
             var validPassports = 0;
+            var validPassports2 = 0;
             var rawPassports = new List<string>();
             var tempPassport = "";
 
@@ -34,8 +35,20 @@ namespace day0x04
                 if (passport.IsValid()) validPassports++;
             }
 
+            foreach (var rawPassport in rawPassports)
+            {
+                var passport = new AoCPassport(rawPassport);
+                if (passport.IsRealyValid()) validPassports2++;
+            }
+
+
+
+
             Console.WriteLine("--- AOC 2020 [D0x04]");
             Console.WriteLine($"RESULT = {validPassports}");
+
+            Console.WriteLine("--- AOC 2020 [D0x04] P2");
+            Console.WriteLine($"RESULT = {validPassports2}");
         }
 
         #region input

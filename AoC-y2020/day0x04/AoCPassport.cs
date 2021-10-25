@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace day0x04
@@ -77,6 +78,86 @@ namespace day0x04
                 !string.IsNullOrWhiteSpace(Hcl) &&
                 !string.IsNullOrWhiteSpace(Ecl) &&
                 !string.IsNullOrWhiteSpace(Pid);
+        }
+
+        public bool IsRealyValid()
+        {
+            return IsByrValid() &&
+                IsIyrValid() &&
+                IsEyrValid() &&
+                IsHgtValid() &&
+                IsHclValid() &&
+                IsEclValid() &&
+                IsPidValid() &&
+                IsCidValid();
+        }
+
+        private bool IsByrValid()
+        {
+            return Byr <= 2002 && Byr >= 1920;
+        }
+
+        private bool IsIyrValid()
+        {
+            return Iyr <= 2020 && Iyr >= 2010;
+        }
+
+        private bool IsEyrValid()
+        {
+            return Eyr <= 2030 && Eyr >= 2020;
+        }
+
+        private bool IsHgtValid()
+        {
+            if (string.IsNullOrWhiteSpace(Hgt)) return false;
+
+            var unit = Hgt[^2..];
+            var value = StrToInt(Hgt[..^2]);
+
+            return unit switch
+            {
+                "cm" => value <= 193 && value >= 150,
+                "in" => value <= 76 && value >= 59,
+                _ => false,
+            };
+        }
+
+        private bool IsHclValid()
+        {
+            if (string.IsNullOrWhiteSpace(Hcl)) return false;
+
+            var pat = "#[a-f0-9]{6}$";
+            var regex = new Regex(pat);
+            var match = regex.Match(Hcl);
+
+            return match.Success;
+        }
+
+        private bool IsEclValid()
+        {
+            if (string.IsNullOrWhiteSpace(Ecl)) return false;
+
+            var pat = "amb|blu|brn|gry|grn|hzl|oth";
+            var regex = new Regex(pat);
+            var match = regex.Match(Ecl);
+
+            return match.Success;
+        }
+
+        private bool IsPidValid()
+        {
+            if (string.IsNullOrWhiteSpace(Pid)) return false;
+
+            var pat = "^[0-9]{9}$";
+            var regex = new Regex(pat);
+            var match = regex.Match(Pid);
+
+            return match.Success;
+        }
+
+        private bool IsCidValid()
+        {
+            return true;
         }
 
         private static int StrToInt(string input)
